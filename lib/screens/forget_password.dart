@@ -1,95 +1,68 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:fluttertoast2/fluttertoast.dart';
 
 import '../constant.dart';
-import 'package:http/http.dart' as http;
 
-import 'login_screen.dart';
-
-class ChooseCompany extends StatefulWidget {
+class ForgetPaswword extends StatefulWidget {
   @override
-  _ChooseCompanyState createState() => _ChooseCompanyState();
+  _ForgetPaswwordState createState() => _ForgetPaswwordState();
 }
 
-class _ChooseCompanyState extends State<ChooseCompany> {
-  TextEditingController _name = TextEditingController();
+class _ForgetPaswwordState extends State<ForgetPaswword> {
+  TextEditingController _email = TextEditingController();
   bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-      child: Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: [
-          SizedBox(
-            height: 60,
-          ),
-          Image.asset(
-            "assets/images/bannar.png",
-            height: 200,
-          ),
-          SizedBox(
-            height: 20,
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
                 Text(
-                  "Join your team space",
+                  "Forget Your password ?",
                   style: TextStyle(
                       color: Colors.blue[700],
                       fontSize: 22,
                       fontWeight: FontWeight.bold),
-                )
+                ),
               ],
             ),
           ),
-          SizedBox(
-            height: 30,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width - 45,
+                  child: Text(
+                    "Enter your e-mail to send link for reset your password",
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 17,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                  ),
+                ),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
                 Text(
-                  "Enter your company's ",
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 17,
-                  ),
-                ),
-                Text(
-                  "Oprnize Url ",
-                  style: TextStyle(
-                    color: Colors.grey[900],
-                    fontSize: 17,
-                  ),
-                ),
-                Text(
-                  "below",
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 17,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Text(
-                  "Company's Name",
+                  "Your Email",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 22,
@@ -104,32 +77,22 @@ class _ChooseCompanyState extends State<ChooseCompany> {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width / 2,
+                  width: MediaQuery.of(context).size.width - 45,
                   height: 55,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       border:
                           Border(bottom: BorderSide(color: Colors.grey[100]))),
                   child: TextField(
-                    controller: _name,
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _email,
                     enableSuggestions: false,
                     autocorrect: false,
                     decoration: InputDecoration(
-                        prefixIcon: IconButton(
-                            icon: Icon(
-                              Icons.link,
-                              size: 30,
-                              color: Colors.grey[500],
-                            ),
-                            onPressed: null),
                         border: InputBorder.none,
                         hintStyle: TextStyle(color: Colors.grey[400])),
                   ),
                 ),
-                Text(
-                  "  .oprnize.com",
-                  style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-                )
               ],
             ),
           ),
@@ -152,9 +115,9 @@ class _ChooseCompanyState extends State<ChooseCompany> {
               elevation: 5.0,
               color: Colors.blue[700],
               onPressed: () async {
-                if (_name.text.isEmpty) {
+                if (_email.text.isEmpty) {
                   Fluttertoast.showToast(
-                      msg: "You must enter the name",
+                      msg: "You must enter the email",
                       backgroundColor: Colors.red,
                       textColor: Colors.white,
                       fontSize: 16.0);
@@ -162,8 +125,7 @@ class _ChooseCompanyState extends State<ChooseCompany> {
                   setState(() {
                     loading = true;
                   });
-
-                  await checkCompany();
+                  await sendCode();
                   setState(() {
                     loading = false;
                   });
@@ -173,33 +135,39 @@ class _ChooseCompanyState extends State<ChooseCompany> {
                   borderRadius:
                       BorderRadius.only(bottomRight: Radius.circular(15))),
               child: Text(
-                "submit",
+                "send",
                 style: TextStyle(
-                    color: Colors.white, letterSpacing: 1, fontSize: 25),
+                    color: Colors.white, letterSpacing: 1, fontSize: 24),
               ),
             ),
           ),
         ],
       ),
-    ));
+    );
   }
 
-  Future checkCompany() async {
+  Future sendCode() async {
     try {
-      http.Response response = await http.get(
-        ApiUrl.cheekCompany + _name.text,
-      );
-
+      http.Response response =
+          await http.post(ApiUrl.forgetPassword, body: {"email": _email.text});
+      var body = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
-        if (body["status"] == 1) {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => LoginScreen(
-                    nameCompany: _name.text,
-                  )));
+        if (body["status"] == 200) {
+          Fluttertoast.showToast(
+              msg: "chck your email, we sent the resting",
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          Navigator.pop(context);
+        } else if (body["status"] == 400) {
+          Fluttertoast.showToast(
+              msg: "user does not exist",
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
         } else {
           Fluttertoast.showToast(
-              msg: body["1"],
+              msg: "An error occurred, try again",
               backgroundColor: Colors.red,
               textColor: Colors.white,
               fontSize: 16.0);
@@ -212,7 +180,6 @@ class _ChooseCompanyState extends State<ChooseCompany> {
             fontSize: 16.0);
       }
     } catch (e) {
-      print(e);
       Fluttertoast.showToast(
           msg: "An error occurred, try again",
           backgroundColor: Colors.red,

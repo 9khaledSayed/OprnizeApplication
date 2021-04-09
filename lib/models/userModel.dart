@@ -4,7 +4,7 @@ class UserModel {
   String providerId;
   String departmentId;
   String sectionId;
-  int supervisorId;
+  String supervisorId;
   String workShiftId;
   String nationalityId;
   String jobTitleId;

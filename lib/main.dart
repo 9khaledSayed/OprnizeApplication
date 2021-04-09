@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: "Nour"),
+      theme: ThemeData(fontFamily: "Lato"),
       home: token == null ? ChooseCompany() : HomeScreen(),
     );
   }
