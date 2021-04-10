@@ -20,7 +20,10 @@ dependencies:
   device_info:
   geolocator: ^5.1.5
   image_picker: ^0.6.3+4
-  percent_indicator: 
+  percent_indicator:
+  geocoding:
+  
+  
 
 
 dev_dependencies:

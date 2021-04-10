@@ -5,4 +5,5 @@ class ApiUrl {
   static const String logout = mainUrl + "logout";
   static const String forgetPassword = mainUrl + "forgot-password";
   static const String getDataHomeScreen = mainUrl + "job_info";
+  static const String attendace = mainUrl + "punch";
 }

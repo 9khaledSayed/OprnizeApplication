@@ -250,6 +250,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+// دالة تسجيل الدخول وحفظ جميع بيانات اليوزر في شيرد برنفسيس
+// login function and save all user data inshared preferences
   Future<UserModel> login() async {
     try {
       UserModel user;

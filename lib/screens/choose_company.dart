@@ -58,37 +58,6 @@ class _ChooseCompanyState extends State<ChooseCompany> {
             child: Row(
               children: [
                 Text(
-                  "Enter your company's ",
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 17,
-                  ),
-                ),
-                Text(
-                  "Oprnize Url ",
-                  style: TextStyle(
-                    color: Colors.grey[900],
-                    fontSize: 17,
-                  ),
-                ),
-                Text(
-                  "below",
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 17,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Text(
                   "Company's Name",
                   style: TextStyle(
                     color: Colors.black,
@@ -101,10 +70,11 @@ class _ChooseCompanyState extends State<ChooseCompany> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width / 2,
+                  width: MediaQuery.of(context).size.width - 50,
                   height: 55,
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -126,10 +96,6 @@ class _ChooseCompanyState extends State<ChooseCompany> {
                         hintStyle: TextStyle(color: Colors.grey[400])),
                   ),
                 ),
-                Text(
-                  "  .oprnize.com",
-                  style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-                )
               ],
             ),
           ),
@@ -184,6 +150,8 @@ class _ChooseCompanyState extends State<ChooseCompany> {
     ));
   }
 
+// الدالة التي تتحقق من ال اسم الشركة
+// function that check name of comapny
   Future checkCompany() async {
     try {
       http.Response response = await http.get(
@@ -193,6 +161,11 @@ class _ChooseCompanyState extends State<ChooseCompany> {
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         if (body["status"] == 1) {
+          Fluttertoast.showToast(
+              msg: "you are belong your comapany : ${_name.text}",
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 16.0);
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (BuildContext context) => LoginScreen(
                     nameCompany: _name.text,
