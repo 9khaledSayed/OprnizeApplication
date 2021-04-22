@@ -19,7 +19,7 @@ dependencies:
   fluttertoast2:
   device_info:
   geolocator: ^5.1.5
-  image_picker: ^0.6.3+4
+  image_picker: ^0.6.7+4
   percent_indicator:
   geocoding:
   

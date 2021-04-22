@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oprnize/screens/all_leaves.dart';
 import 'package:oprnize/screens/choose_company.dart';
 import 'package:oprnize/screens/home_screen.dart';
+import 'package:oprnize/screens/new_leave.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

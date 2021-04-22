@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oprnize/screens/all_leaves.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AllRequests extends StatefulWidget {
@@ -142,7 +143,12 @@ class _AllRequestsState extends State<AllRequests> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              button("assets/icons/4.png", "Leave", () {}),
+              button("assets/icons/4.png", "Leave", () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AllLeaves()),
+                );
+              }),
               button("assets/icons/3.png", "Excuse", () {}),
             ],
           ),
